@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <table class="layui-table" style="margin: 0">
+        <tbody>
+        <tr><td colspan="9">ASIN 列表 </td></tr>
+        <tr>
+            <td width="20">序</td>
+            <td width="50">图片</td>
+            <td>Asin</td>
+            <td>操作</td>
+            <td>排名</td>
+            <td>价格</td>
+            <td>库存</td>
+            <td width="150">最近查询时间</td>
+            <td width="150">添加时间</td>
+        </tr>
+
+        {% for item in data %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{% if item.img %}<img src="{{ item.img }}" height="50">{% else %} 未抓取 {% endif %}</td>
+            <td><a href="https://www.amazon.com/dp/{{item.asin}}" target="_blank" style="color:#1E9FFF">{{ item.asin }}</a></td>
+            <td id="exe">
+                <a href="{{url_for('ams.delasin', id=item.aid)}}" class="layui-btn layui-btn-xs layui-btn-normal">删除</a>
+                <a href="{{url_for('ams.lists')}}?id={{item.aid}}" class="layui-btn layui-btn-xs">排名</a>
+                <a href="{{url_for('ams.lists')}}?id={{item.aid}}" class="layui-btn layui-btn-xs">价格</a>
+                <a href="{{url_for('ams.lists')}}?id={{item.aid}}" class="layui-btn layui-btn-xs layui-btn-danger">库存</a>
+                {% if item.seller %}
+                    <a target="_blank" href="https://www.amazon.com/shops/{{item.seller}}" class="layui-btn layui-btn-xs layui-btn-normal">店铺</a>
+                {% endif %}
+            </td>
+            <td>{% if item.bsr %} {{ item.bsr }} {% endif %}</td>
+            <td>{% if item.bsr %} {{ item.price }} {% endif %}</td>
+            <td>{% if item.bsr %} {{ item.stock }} {% endif %}</td>
+            <td>
+                {% if item.uptime %}
+                    {{item.uptime.strftime("%Y-%m-%d %H:%M:%S")}}
+                {% endif %}
+            </td>
+            <td>
+                {% if item.adtime %}
+                    {{item.adtime.strftime("%Y-%m-%d %H:%M:%S")}}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+{% endblock main %}
+
+

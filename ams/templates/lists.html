@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+
+    <table class="layui-table" style="margin: 0">
+        <tbody>
+        <tr>
+            <td colspan="6">ASIN 列表 </td>
+            <td colspan="1"><a href="{{url_for('ams.export', id=request.args.get('id'))}}" class="layui-btn-sm layui-btn">导出</a></td>
+        </tr>
+        <tr>
+            <td width="20">序</td>
+            <td width="50">图片</td>
+            <td>Asin</td>
+            <td>排名</td>
+            <td>价格</td>
+            <td>库存</td>
+            <td>查询时间</td>
+        </tr>
+
+        {% for item in data %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{% if item.listing.img %}<img src="{{ item.listing.img }}" height="50">{% else %} 未抓取 {% endif %}</td>
+            <td><a href="https://www.amazon.com/dp/{{item.listing.asin}}" target="_blank" style="color:#1E9FFF">{{ item.listing.asin }}</a></td>
+            <td>{{ item.bsr }}</td>
+            <td>{{ item.price }}</td>
+            <td>{{ item.stock }}</td>
+            <td>{{ item.uptime.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+
+
+{% endblock main %}
