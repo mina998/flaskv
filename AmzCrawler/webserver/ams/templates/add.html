@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md8">
+            <div class="layui-card">
+                <div class="layui-card-header">添加ASIN</div>
+                <div class="layui-card-body">
+
+                    <form class="layui-form" method="post">
+
+                        <div class="layui-form-item layui-form-text">
+                            <textarea style="min-height: 500px" name="asins" placeholder="请输入内容每行一条 eg:ASIN|SellerID" class="layui-textarea" lay-verify="required"></textarea>
+                        </div>
+                        <div class="layui-form-item">
+                            <button class="layui-btn" lay-submit lay-filter="add">立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        layui.use('form', function(){
+            var form = layui.form;
+            form.on('submit(add)', function(data){
+                var msg = '添加成功!'
+                $.post('', data.field, function (res) {
+                    if (res.length>0){
+                        msg = '<strong>已删除以下重复信息!</strong><br>'
+                        $.each(res,function (i,obj) {
+                            if (obj.length == 2){
+                                msg += obj[0]+':'+obj[1]+"<br>"
+                            }else{
+                                msg += obj[0]+"<br>"
+                            }
+                        })
+                    }
+
+                    layer.open({
+                        title: '提示信息!',
+                        content: msg,
+                        yes: function(index, layero){
+                            //do something
+                            window.location.href='{{ url_for("ams.index") }}';
+                        }
+
+                    })
+                })
+                return false;
+            })
+        })
+    </script>
+{% endblock main %}
